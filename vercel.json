@@ -1,5 +1,5 @@
 {
   "build": {
-    "command": "pnpm run deploy"
+    "command": "npm install pnpm & pnpm install & pnpm run build"
   }
 }
