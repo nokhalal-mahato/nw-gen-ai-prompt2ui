@@ -38,15 +38,15 @@ export const createChatFromFolder = async (
     role: 'assistant',
     content: `I've imported the contents of the "${folderName}" folder.${binaryFilesMessage}
 
-<boltArtifact id="imported-files" title="Imported Files">
+<prompt2uiArtifact id="imported-files" title="Imported Files">
 ${fileArtifacts
   .map(
-    (file) => `<boltAction type="file" filePath="${file.path}">
+    (file) => `<prompt2uiAction type="file" filePath="${file.path}">
 ${file.content}
-</boltAction>`,
+</prompt2uiAction>`,
   )
   .join('\n\n')}
-</boltArtifact>`,
+</prompt2uiArtifact>`,
     id: generateId(),
     createdAt: new Date(),
   };

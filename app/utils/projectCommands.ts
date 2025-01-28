@@ -69,11 +69,11 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
   return {
     role: 'assistant',
     content: `
-<boltArtifact id="project-setup" title="Project Setup">
-<boltAction type="shell">
+<prompt2uiArtifact id="project-setup" title="Project Setup">
+<prompt2uiAction type="shell">
 ${commands.setupCommand}
-</boltAction>
-</boltArtifact>${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}`,
+</prompt2uiAction>
+</prompt2uiArtifact>${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}`,
     id: generateId(),
     createdAt: new Date(),
   };

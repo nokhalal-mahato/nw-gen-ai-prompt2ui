@@ -92,8 +92,8 @@ export class WorkbenchStore {
   get showTerminal() {
     return this.#terminalStore.showTerminal;
   }
-  get boltTerminal() {
-    return this.#terminalStore.boltTerminal;
+  get prompt2uiTerminal() {
+    return this.#terminalStore.prompt2uiTerminal;
   }
   get alert() {
     return this.actionAlert;
@@ -109,8 +109,8 @@ export class WorkbenchStore {
   attachTerminal(terminal: ITerminal) {
     this.#terminalStore.attachTerminal(terminal);
   }
-  attachBoltTerminal(terminal: ITerminal) {
-    this.#terminalStore.attachBoltTerminal(terminal);
+  attachPrompt2UITerminal(terminal: ITerminal) {
+    this.#terminalStore.attachPrompt2UITerminal(terminal);
   }
 
   onTerminalResize(cols: number, rows: number) {
@@ -267,7 +267,7 @@ export class WorkbenchStore {
       type,
       runner: new ActionRunner(
         webcontainer,
-        () => this.boltTerminal,
+        () => this.prompt2uiTerminal,
         (alert) => {
           if (this.#reloadedMessages.has(messageId)) {
             return;

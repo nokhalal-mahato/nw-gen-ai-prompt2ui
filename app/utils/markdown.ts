@@ -64,9 +64,9 @@ const rehypeSanitizeOptions: RehypeSanitizeOptions = {
     div: [
       ...(defaultSchema.attributes?.div ?? []),
       'data*',
-      ['className', '__boltArtifact__', '__boltThought__'],
+      ['className', '__prompt2uiArtifact__', '__prompt2uiThought__'],
 
-      // ['className', '__boltThought__']
+      // ['className', '__prompt2uiThought__']
     ],
   },
   strip: [],

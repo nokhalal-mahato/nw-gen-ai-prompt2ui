@@ -91,26 +91,7 @@ export const SettingsWindow = ({ open, onClose }: SettingsProps) => {
                     {tab.label}
                   </button>
                 ))}
-                <div className="mt-auto flex flex-col gap-2">
-                  <a
-                    href="https://github.com/stackblitz-labs/bolt.diy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classNames(styles['settings-button'], 'flex items-center gap-2')}
-                  >
-                    <div className="i-ph:github-logo" />
-                    GitHub
-                  </a>
-                  <a
-                    href="https://stackblitz-labs.github.io/bolt.diy/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classNames(styles['settings-button'], 'flex items-center gap-2')}
-                  >
-                    <div className="i-ph:book" />
-                    Docs
-                  </a>
-                </div>
+                <div className="mt-auto flex flex-col gap-2"></div>
               </div>
 
               <div className="flex-1 flex flex-col p-8 pt-10 bg-bolt-elements-background-depth-2">

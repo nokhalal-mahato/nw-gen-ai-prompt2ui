@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 import { ImportFolderButton } from '~/components/chat/ImportFolderButton';
 
 type ChatData = {
-  messages?: Message[]; // Standard Bolt format
-  description?: string; // Optional description
+  messages?: Message[];
+  description?: string;
 };
 
 export function ImportButtons(importChat: ((description: string, messages: Message[]) => Promise<void>) | undefined) {

@@ -44,9 +44,9 @@ export function extractPropertiesFromMessage(message: Omit<Message, 'id'>): {
   return { model, provider, content: cleanedContent };
 }
 
-export function simplifyBoltActions(input: string): string {
-  // Using regex to match boltAction tags that have type="file"
-  const regex = /(<boltAction[^>]*type="file"[^>]*>)([\s\S]*?)(<\/boltAction>)/g;
+export function simplifyprompt2uiActions(input: string): string {
+  // Using regex to match prompt2uiAction tags that have type="file"
+  const regex = /(<prompt2uiAction[^>]*type="file"[^>]*>)([\s\S]*?)(<\/prompt2uiAction>)/g;
 
   // Replace each matching occurrence
   return input.replace(regex, (_0, openingTag, _2, closingTag) => {

@@ -1,3 +1,4 @@
+import 'virtual:uno.css';
 import { useStore } from '@nanostores/react';
 import type { LinksFunction } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
@@ -11,16 +12,14 @@ import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
 import globalStyles from './styles/index.scss?url';
 import xtermStyles from '@xterm/xterm/css/xterm.css?url';
 
-import 'virtual:uno.css';
-
 export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: tailwindReset },
   {
     rel: 'icon',
     href: '/favicon.svg',
     type: 'image/svg+xml',
   },
   { rel: 'stylesheet', href: reactToastifyStyles },
-  { rel: 'stylesheet', href: tailwindReset },
   { rel: 'stylesheet', href: globalStyles },
   { rel: 'stylesheet', href: xtermStyles },
   {
@@ -42,13 +41,8 @@ const inlineThemeCode = stripIndents`
   setTutorialKitTheme();
 
   function setTutorialKitTheme() {
-    let theme = localStorage.getItem('bolt_theme');
 
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    document.querySelector('html')?.setAttribute('data-theme', theme);
+    document.querySelector('html')?.setAttribute('data-theme', 'light');
   }
 `;
 

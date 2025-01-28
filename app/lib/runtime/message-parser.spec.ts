@@ -28,7 +28,7 @@ describe('StreamingMessageParser', () => {
       ['Foo bar <', 'Foo bar '],
       ['Foo bar <p', 'Foo bar <p'],
       [['Foo bar <', 's', 'p', 'an>some text</span>'], 'Foo bar <span>some text</span>'],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out prompt2ui artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -37,14 +37,17 @@ describe('StreamingMessageParser', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       ['Foo bar <b', 'Foo bar '],
       ['Foo bar <ba', 'Foo bar <ba'],
-      ['Foo bar <bol', 'Foo bar '],
-      ['Foo bar <bolt', 'Foo bar '],
-      ['Foo bar <bolta', 'Foo bar <bolta'],
-      ['Foo bar <boltA', 'Foo bar '],
-      ['Foo bar <boltArtifacs></boltArtifact>', 'Foo bar <boltArtifacs></boltArtifact>'],
-      ['Before <oltArtfiact>foo</boltArtifact> After', 'Before <oltArtfiact>foo</boltArtifact> After'],
-      ['Before <boltArtifactt>foo</boltArtifact> After', 'Before <boltArtifactt>foo</boltArtifact> After'],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+      ['Foo bar <prompt2u', 'Foo bar '],
+      ['Foo bar <prompt2ui', 'Foo bar '],
+      ['Foo bar <prompt2uia', 'Foo bar <prompt2uia'],
+      ['Foo bar <prompt2uiA', 'Foo bar '],
+      ['Foo bar <prompt2uiArtifacs></prompt2uiArtifact>', 'Foo bar <prompt2uiArtifacs></prompt2uiArtifact>'],
+      ['Before <oltArtfiact>foo</prompt2uiArtifact> After', 'Before <oltArtfiact>foo</prompt2uiArtifact> After'],
+      [
+        'Before <prompt2uiArtifactt>foo</prompt2uiArtifact> After',
+        'Before <prompt2uiArtifactt>foo</prompt2uiArtifact> After',
+      ],
+    ])('should correctly parse chunks and strip out prompt2ui artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -52,7 +55,7 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts without actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Some text before <boltArtifact title="Some title" id="artifact_1">foo bar</boltArtifact> Some more text',
+        'Some text before <prompt2uiArtifact title="Some title" id="artifact_1">foo bar</prompt2uiArtifact> Some more text',
         {
           output: 'Some text before  Some more text',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
@@ -60,9 +63,9 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <prompt2uiArti',
           'fact',
-          ' title="Some title" id="artifact_1" type="bundled" >foo</boltArtifact> Some more text',
+          ' title="Some title" id="artifact_1" type="bundled" >foo</prompt2uiArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -71,12 +74,12 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <prompt2uiArti',
           'fac',
           't title="Some title" id="artifact_1"',
           ' ',
           '>',
-          'foo</boltArtifact> Some more text',
+          'foo</prompt2uiArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -85,11 +88,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <prompt2uiArti',
           'fact',
           ' title="Some title" id="artifact_1"',
           ' >fo',
-          'o</boltArtifact> Some more text',
+          'o</prompt2uiArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -98,13 +101,13 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <prompt2uiArti',
           'fact tit',
           'le="Some ',
           'title" id="artifact_1">fo',
           'o',
           '<',
-          '/boltArtifact> Some more text',
+          '/prompt2uiArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -113,11 +116,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <prompt2uiArti',
           'fact title="Some title" id="artif',
           'act_1">fo',
           'o<',
-          '/boltArtifact> Some more text',
+          '/prompt2uiArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -125,13 +128,13 @@ describe('StreamingMessageParser', () => {
         },
       ],
       [
-        'Before <boltArtifact title="Some title" id="artifact_1">foo</boltArtifact> After',
+        'Before <prompt2uiArtifact title="Some title" id="artifact_1">foo</prompt2uiArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
         },
       ],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out prompt2ui artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -139,20 +142,20 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts with actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Before <boltArtifact title="Some title" id="artifact_1"><boltAction type="shell">npm install</boltAction></boltArtifact> After',
+        'Before <prompt2uiArtifact title="Some title" id="artifact_1"><prompt2uiAction type="shell">npm install</prompt2uiAction></prompt2uiArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 1, onActionClose: 1 },
         },
       ],
       [
-        'Before <boltArtifact title="Some title" id="artifact_1"><boltAction type="shell">npm install</boltAction><boltAction type="file" filePath="index.js">some content</boltAction></boltArtifact> After',
+        'Before <prompt2uiArtifact title="Some title" id="artifact_1"><prompt2uiAction type="shell">npm install</prompt2uiAction><prompt2uiAction type="file" filePath="index.js">some content</prompt2uiAction></prompt2uiArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 2, onActionClose: 2 },
         },
       ],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out prompt2ui artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });

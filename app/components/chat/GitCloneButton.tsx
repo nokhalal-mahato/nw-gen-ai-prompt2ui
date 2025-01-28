@@ -78,16 +78,16 @@ export default function GitCloneButton({ importChat }: GitCloneButtonProps) {
           const filesMessage: Message = {
             role: 'assistant',
             content: `Cloning the repo ${repoUrl} into ${workdir}
-<boltArtifact id="imported-files" title="Git Cloned Files" type="bundled">
+<prompt2uiArtifact id="imported-files" title="Git Cloned Files" type="bundled">
 ${fileContents
   .map(
     (file) =>
-      `<boltAction type="file" filePath="${file.path}">
+      `<prompt2uiAction type="file" filePath="${file.path}">
 ${file.content}
-</boltAction>`,
+</prompt2uiAction>`,
   )
   .join('\n')}
-</boltArtifact>`,
+</prompt2uiArtifact>`,
             id: generateId(),
             createdAt: new Date(),
           };

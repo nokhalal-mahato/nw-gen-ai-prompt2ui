@@ -17,9 +17,9 @@ export interface StartAction extends BaseAction {
   type: 'start';
 }
 
-export type BoltAction = FileAction | ShellAction | StartAction;
+export type Prompt2UIAction = FileAction | ShellAction | StartAction;
 
-export type BoltActionData = BoltAction | BaseAction;
+export type Prompt2UIActionData = Prompt2UIAction | BaseAction;
 
 export interface ActionAlert {
   type: string;

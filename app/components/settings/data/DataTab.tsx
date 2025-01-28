@@ -118,7 +118,7 @@ export default function DataTab() {
       selectedProvider: Cookies.get('selectedProvider'),
       githubUsername: Cookies.get('githubUsername'),
       githubToken: Cookies.get('githubToken'),
-      bolt_theme: localStorage.getItem('bolt_theme'),
+      prompt2ui_theme: localStorage.getItem('prompt2ui_theme'),
     };
 
     downloadAsJson(settings, 'bolt-settings.json');
@@ -139,7 +139,7 @@ export default function DataTab() {
         const settings = JSON.parse(e.target?.result as string);
 
         Object.entries(settings).forEach(([key, value]) => {
-          if (key === 'bolt_theme') {
+          if (key === 'prompt2ui_theme') {
             if (value) {
               localStorage.setItem(key, value as string);
             }
@@ -241,7 +241,6 @@ export default function DataTab() {
     description: string;
     urlId?: string;
   }> => {
-    // Handle Bolt standard format (single chat)
     if (data.messages && Array.isArray(data.messages)) {
       const chatId = crypto.randomUUID();
       return [
@@ -254,7 +253,6 @@ export default function DataTab() {
       ];
     }
 
-    // Handle Bolt export format (multiple chats)
     if (data.chats && Array.isArray(data.chats)) {
       return data.chats.map((chat: { id?: string; messages: Message[]; description?: string; urlId?: string }) => ({
         id: chat.id || crypto.randomUUID(),

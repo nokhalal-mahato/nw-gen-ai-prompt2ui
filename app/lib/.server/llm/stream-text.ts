@@ -7,7 +7,7 @@ import { PromptLibrary } from '~/lib/common/prompt-library';
 import { allowedHTMLElements } from '~/utils/markdown';
 import { LLMManager } from '~/lib/modules/llm/manager';
 import { createScopedLogger } from '~/utils/logger';
-import { createFilesContext, extractPropertiesFromMessage, simplifyBoltActions } from './utils';
+import { createFilesContext, extractPropertiesFromMessage, simplifyprompt2uiActions } from './utils';
 import { getFilePaths } from './select-context';
 
 export type Messages = Message[];
@@ -53,7 +53,7 @@ export async function streamText(props: {
       let content = message.content;
 
       if (contextOptimization) {
-        content = simplifyBoltActions(content);
+        content = simplifyprompt2uiActions(content);
       }
 
       return { ...message, content };
