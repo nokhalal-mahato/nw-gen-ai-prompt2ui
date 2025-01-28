@@ -8,23 +8,7 @@ import { classNames } from '~/utils/classNames';
 import type { Message } from 'ai';
 
 // List of supported providers that can have API keys
-const API_KEY_PROVIDERS = [
-  'Anthropic',
-  'OpenAI',
-  'Google',
-  'Groq',
-  'HuggingFace',
-  'OpenRouter',
-  'Deepseek',
-  'Mistral',
-  'OpenAILike',
-  'Together',
-  'xAI',
-  'Perplexity',
-  'Cohere',
-  'AzureOpenAI',
-  'AmazonBedrock',
-] as const;
+const API_KEY_PROVIDERS = ['OpenAI'] as const;
 
 interface ApiKeys {
   [key: string]: string;
