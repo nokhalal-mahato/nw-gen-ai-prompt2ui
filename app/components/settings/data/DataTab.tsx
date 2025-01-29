@@ -182,14 +182,6 @@ export default function DataTab() {
         });
 
         if (importedCount > 0) {
-          // Store all API keys in a single cookie as JSON
-          Cookies.set('apiKeys', JSON.stringify(consolidatedKeys));
-
-          // Also set individual cookies for backward compatibility
-          Object.entries(consolidatedKeys).forEach(([provider, key]) => {
-            Cookies.set(`${provider}_API_KEY`, key);
-          });
-
           toast.success(`Successfully imported ${importedCount} API keys/URLs. Refreshing page to apply changes...`);
 
           // Reload the page after a short delay to allow the toast to be seen
