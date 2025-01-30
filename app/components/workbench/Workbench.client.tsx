@@ -18,6 +18,9 @@ import { EditorPanel } from './EditorPanel';
 import { Preview } from './Preview';
 import useViewport from '~/lib/hooks';
 import Cookies from 'js-cookie';
+import GitHubAuthModal from '~/components/ui/GithubAuthModal';
+import TextInputModal from '~/components/ui/TextInputModal';
+import LoadingSuccessModal from '~/components/ui/LoadingSuccessModal';
 
 interface WorkspaceProps {
   chatStarted?: boolean;
@@ -58,6 +61,12 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
   renderLogger.trace('Workbench');
 
   const [isSyncing, setIsSyncing] = useState(false);
+  const [textInputOpen, setTextInputOpen] = useState(false);
+  const [gitHubAuthOpen, setGitHubAuthOpen] = useState(false);
+  const [repoName, setRepoName] = useState('');
+  const [loadingSuccessOpen, setLoadingSuccessOpen] = useState(false);
+  const [pushStatus, setPushStatus] = useState<'loading' | 'success'>('loading');
+  const [repoUrl, setRepoUrl] = useState<string>('');
 
   const hasPreview = useStore(computed(workbenchStore.previews, (previews) => previews.length > 0));
   const showWorkbench = useStore(workbenchStore.showWorkbench);
@@ -120,6 +129,43 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
     }
   }, []);
 
+  const handlePushToGitHub = () => {
+    setTextInputOpen(true);
+  };
+
+  const onSuccessCodePushedToGitHub = (url: string) => {
+    setRepoUrl(url);
+    setPushStatus('success');
+  };
+
+  const startPushingToGitHub = (repo: string, username: string, token: string) => {
+    setRepoName(repo);
+    setPushStatus('loading');
+    setRepoUrl('');
+    setLoadingSuccessOpen(true); // Show loading modal
+
+    workbenchStore.pushToGitHub(repo, username, token, onSuccessCodePushedToGitHub);
+  };
+
+  const handleRepoNameInput = (name: string) => {
+    setRepoName(name);
+
+    const githubUsername = Cookies.get('githubUsername');
+    const githubToken = Cookies.get('githubToken');
+
+    if (!githubUsername || !githubToken) {
+      setGitHubAuthOpen(true);
+    } else {
+      startPushingToGitHub(name, githubUsername, githubToken);
+    }
+  };
+
+  const handleGitHubAuth = (username: string, token: string) => {
+    Cookies.set('githubUsername', username);
+    Cookies.set('githubToken', token);
+    startPushingToGitHub(repoName, username, token);
+  };
+
   return (
     chatStarted && (
       <motion.div
@@ -168,40 +214,29 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                       <div className="i-ph:terminal" />
                       Toggle Terminal
                     </PanelHeaderButton>
-                    <PanelHeaderButton
-                      className="mr-1 text-sm"
-                      onClick={() => {
-                        const repoName = prompt(
-                          'Please enter a name for your new GitHub repository:',
-                          'bolt-generated-project',
-                        );
-
-                        if (!repoName) {
-                          alert('Repository name is required. Push to GitHub cancelled.');
-                          return;
-                        }
-
-                        const githubUsername = Cookies.get('githubUsername');
-                        const githubToken = Cookies.get('githubToken');
-
-                        if (!githubUsername || !githubToken) {
-                          const usernameInput = prompt('Please enter your GitHub username:');
-                          const tokenInput = prompt('Please enter your GitHub personal access token:');
-
-                          if (!usernameInput || !tokenInput) {
-                            alert('GitHub username and token are required. Push to GitHub cancelled.');
-                            return;
-                          }
-
-                          workbenchStore.pushToGitHub(repoName, usernameInput, tokenInput);
-                        } else {
-                          workbenchStore.pushToGitHub(repoName, githubUsername, githubToken);
-                        }
-                      }}
-                    >
+                    <PanelHeaderButton className="mr-1 text-sm" onClick={handlePushToGitHub}>
                       <div className="i-ph:github-logo" />
                       Push to GitHub
                     </PanelHeaderButton>
+                    <TextInputModal
+                      isOpen={textInputOpen}
+                      onClose={() => setTextInputOpen(false)}
+                      onConfirm={handleRepoNameInput}
+                      title="Please enter a name for your new GitHub repository"
+                      defaultValue="bolt-generated-project"
+                      placeholder="GitHub Repository Name"
+                    />
+                    <GitHubAuthModal
+                      isOpen={gitHubAuthOpen}
+                      onClose={() => setGitHubAuthOpen(false)}
+                      onConfirm={handleGitHubAuth}
+                    />
+                    <LoadingSuccessModal
+                      isOpen={loadingSuccessOpen}
+                      onClose={() => setLoadingSuccessOpen(false)}
+                      status={pushStatus}
+                      repoUrl={repoUrl}
+                    />
                   </div>
                 )}
                 <IconButton

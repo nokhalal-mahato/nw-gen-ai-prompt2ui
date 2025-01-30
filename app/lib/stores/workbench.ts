@@ -434,7 +434,7 @@ export class WorkbenchStore {
     return syncedFiles;
   }
 
-  async pushToGitHub(repoName: string, githubUsername?: string, ghToken?: string) {
+  async pushToGitHub(repoName: string, githubUsername: string, ghToken: string, onSuccess: (url: string) => void) {
     try {
       // Use cookies if username and token are not provided
       const githubToken = ghToken || Cookies.get('githubToken');
@@ -536,7 +536,7 @@ export class WorkbenchStore {
         sha: newCommit.sha,
       });
 
-      alert(`Repository created and code pushed: ${repo.html_url}`);
+      onSuccess(repo.html_url);
     } catch (error) {
       console.error('Error pushing to GitHub:', error);
       throw error; // Rethrow the error for further handling
