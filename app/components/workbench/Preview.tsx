@@ -332,7 +332,7 @@ export const Preview = memo(() => {
                   {WINDOW_SIZES.map((size) => (
                     <button
                       key={size.name}
-                      className="w-full px-4 py-3.5 text-left text-[#111827] dark:text-gray-300 text-sm whitespace-nowrap flex items-center gap-3 group hover:bg-[#F5EEFF] dark:hover:bg-gray-900 bg-white dark:bg-black"
+                      className="w-full px-4 py-3.5 text-left text-[#111827] dark:text-gray-300 text-sm whitespace-nowrap flex items-center gap-3 group hover:bg-[#eff6ff] dark:hover:bg-gray-900 bg-white dark:bg-black"
                       onClick={() => {
                         setSelectedWindowSize(size);
                         setIsWindowSizeDropdownOpen(false);
@@ -340,13 +340,13 @@ export const Preview = memo(() => {
                       }}
                     >
                       <div
-                        className={`${size.icon} w-5 h-5 text-[#6B7280] dark:text-gray-400 group-hover:text-[#6D28D9] dark:group-hover:text-[#6D28D9] transition-colors duration-200`}
+                        className={`${size.icon} w-5 h-5 text-[#6B7280] dark:text-gray-400 group-hover:text-[#2563eb] dark:group-hover:text-[#2563eb] transition-colors duration-200`}
                       />
                       <div className="flex flex-col">
-                        <span className="font-medium group-hover:text-[#6D28D9] dark:group-hover:text-[#6D28D9] transition-colors duration-200">
+                        <span className="font-medium group-hover:text-[#2563eb] dark:group-hover:text-[#2563eb] transition-colors duration-200">
                           {size.name}
                         </span>
-                        <span className="text-xs text-[#6B7280] dark:text-gray-400 group-hover:text-[#6D28D9] dark:group-hover:text-[#6D28D9] transition-colors duration-200">
+                        <span className="text-xs text-[#6B7280] dark:text-gray-400 group-hover:text-[#2563eb] dark:group-hover:text-[#2563eb] transition-colors duration-200">
                           {size.width} × {size.height}
                         </span>
                       </div>
