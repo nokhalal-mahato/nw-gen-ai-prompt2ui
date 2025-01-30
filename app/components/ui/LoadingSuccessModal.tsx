@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BaseModal from './BaseModal';
 
 interface LoadingSuccessModalProps {
@@ -9,24 +9,7 @@ interface LoadingSuccessModalProps {
 }
 
 const LoadingSuccessModal: React.FC<LoadingSuccessModalProps> = ({ isOpen, onClose, status, repoUrl }) => {
-  const [showSuccess, setShowSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (status === 'success') {
-      setShowSuccess(true);
-
-      const timer = setTimeout(() => {
-        setShowSuccess(false);
-        onClose(); // Close modal after 2 seconds
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-        setShowSuccess(false);
-      };
-    }
-  }, [status, onClose]);
 
   const copyToClipboard = () => {
     if (repoUrl) {
@@ -38,6 +21,14 @@ const LoadingSuccessModal: React.FC<LoadingSuccessModalProps> = ({ isOpen, onClo
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} title="">
+      <button
+        className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-800 bg-transparent transition-all"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <span className="i-ph:x-circle block text-2xl"></span> {/* Ensure icon is visible */}
+      </button>
+
       <div className="flex flex-col items-center justify-center p-6">
         {status === 'loading' && (
           <>
@@ -46,9 +37,9 @@ const LoadingSuccessModal: React.FC<LoadingSuccessModalProps> = ({ isOpen, onClo
           </>
         )}
 
-        {showSuccess && (
+        {status === 'success' && (
           <div className="flex flex-col items-center">
-            <div className="text-green-500 text-3xl">✔</div>
+            <span className="i-ph:check-circle text-green-500 text-3xl"></span> {/* Success checkmark */}
             <p className="mt-3 text-green-400 text-lg font-medium">Code pushed successfully!</p>
             {repoUrl && (
               <div className="bg-gray-100 border border-gray-700 rounded-lg p-3 mt-3 w-full text-center">
@@ -58,15 +49,17 @@ const LoadingSuccessModal: React.FC<LoadingSuccessModalProps> = ({ isOpen, onClo
                     href={repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-500 text-sm font-medium mr-3"
+                    className="text-blue-400 hover:text-blue-500 text-sm font-medium mr-3 flex items-center"
                   >
-                    🔗 Open in GitHub
+                    <span className="i-ph:link text-sm mr-1"></span>
+                    Open in GitHub
                   </a>
                   <button
                     onClick={copyToClipboard}
-                    className="flex items-center text-gray-500 hover:text-white text-sm"
+                    className="flex items-center text-gray-500 hover:text-gray-800 text-sm"
                   >
-                    📋 {copied ? 'Copied' : 'Copy'}
+                    <span className="i-ph:copy text-sm mr-1"></span>
+                    {copied ? 'Copied' : 'Copy'}
                   </button>
                 </div>
               </div>

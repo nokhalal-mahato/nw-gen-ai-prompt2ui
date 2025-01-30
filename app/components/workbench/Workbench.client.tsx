@@ -134,7 +134,6 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
   };
 
   const onSuccessCodePushedToGitHub = (url: string) => {
-    console.log('URL:>>>>', url);
     setRepoUrl(url);
     setPushStatus('success');
   };
