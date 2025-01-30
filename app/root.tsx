@@ -16,7 +16,7 @@ export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindReset },
   {
     rel: 'icon',
-    href: '/favicon.svg',
+    href: '/nxtwave-touch-icon-ipad-retina.png',
     type: 'image/svg+xml',
   },
   { rel: 'stylesheet', href: reactToastifyStyles },
