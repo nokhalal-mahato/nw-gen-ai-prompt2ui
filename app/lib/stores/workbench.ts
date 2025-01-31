@@ -434,7 +434,13 @@ export class WorkbenchStore {
     return syncedFiles;
   }
 
-  async pushToGitHub(repoName: string, githubUsername: string, ghToken: string, onSuccess: (url: string) => void) {
+  async pushToGitHub(
+    repoName: string,
+    githubUsername: string,
+    ghToken: string,
+    onSuccess: (url: string) => void,
+    onErrorCodePushToGithub: (error?: string) => void,
+  ) {
     try {
       // Use cookies if username and token are not provided
       const githubToken = ghToken || Cookies.get('githubToken');
@@ -472,6 +478,7 @@ export class WorkbenchStore {
       const files = this.files.get();
 
       if (!files || Object.keys(files).length === 0) {
+        onErrorCodePushToGithub('No files found to push');
         throw new Error('No files found to push');
       }
 
@@ -495,6 +502,7 @@ export class WorkbenchStore {
       const validBlobs = blobs.filter(Boolean); // Filter out any undefined blobs
 
       if (validBlobs.length === 0) {
+        onErrorCodePushToGithub('No valid files to push');
         throw new Error('No valid files to push');
       }
 
@@ -538,6 +546,7 @@ export class WorkbenchStore {
 
       onSuccess(repo.html_url);
     } catch (error) {
+      onErrorCodePushToGithub('Error pushing to GitHub');
       console.error('Error pushing to GitHub:', error);
       throw error; // Rethrow the error for further handling
     }
