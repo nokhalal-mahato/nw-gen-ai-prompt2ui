@@ -229,7 +229,7 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
         const result = await streamText({
           messages,
           env: context.cloudflare?.env,
-          options,
+          options: { ...options, ...{ temperature: 0.5 } },
           apiKeys,
           files,
           providerSettings,
