@@ -1,19 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import BaseModal from './BaseModal';
 
 interface GitHubAuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (username: string, token: string) => void;
+  status: 'loading' | 'success' | 'failed' | 'initial';
 }
 
-const GitHubAuthModal: React.FC<GitHubAuthModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const GitHubAuthModal: React.FC<GitHubAuthModalProps> = ({ isOpen, onClose, onConfirm, status }) => {
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setToken('');
+    const githubUsername = Cookies.get('githubUsername');
+    const githubToken = Cookies.get('githubToken');
+
+    if (githubUsername) {
+      setUsername(githubUsername);
+    } else {
+      setUsername('');
+    }
+
+    if (githubToken) {
+      setToken(githubToken);
+    } else {
+      setToken('');
+    }
+
     setError('');
   }, [isOpen]);
 
@@ -24,7 +40,6 @@ const GitHubAuthModal: React.FC<GitHubAuthModalProps> = ({ isOpen, onClose, onCo
     }
 
     onConfirm(username.trim(), token.trim());
-    onClose();
   };
 
   return (
@@ -48,8 +63,16 @@ const GitHubAuthModal: React.FC<GitHubAuthModalProps> = ({ isOpen, onClose, onCo
         <button className="px-4 py-2 rounded hover:bg-gray-200" onClick={onClose}>
           Cancel
         </button>
-        <button className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600 text-white" onClick={handleSubmit}>
-          OK
+        <button
+          className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600 text-white w-16 text-center"
+          disabled={status === 'loading'}
+          onClick={handleSubmit}
+        >
+          {status === 'loading' ? (
+            <div className="w-4 h-4 border-2 border-white-500 border-t-transparent rounded-full animate-spin m-auto"></div>
+          ) : (
+            <div>OK</div>
+          )}
         </button>
       </div>
     </BaseModal>

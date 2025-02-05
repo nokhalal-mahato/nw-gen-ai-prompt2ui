@@ -4,7 +4,7 @@ import BaseModal from './BaseModal';
 interface LoadingSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
-  status: 'loading' | 'success';
+  status: 'loading' | 'success' | 'failed' | 'initial';
   repoUrl?: string;
 }
 

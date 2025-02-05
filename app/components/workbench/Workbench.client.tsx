@@ -65,7 +65,7 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
   const [gitHubAuthOpen, setGitHubAuthOpen] = useState(false);
   const [repoName, setRepoName] = useState('');
   const [loadingSuccessOpen, setLoadingSuccessOpen] = useState(false);
-  const [pushStatus, setPushStatus] = useState<'loading' | 'success'>('loading');
+  const [pushStatus, setPushStatus] = useState<'loading' | 'success' | 'failed' | 'initial'>('initial');
   const [repoUrl, setRepoUrl] = useState<string>('');
 
   const hasPreview = useStore(computed(workbenchStore.previews, (previews) => previews.length > 0));
@@ -131,33 +131,31 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
 
   const handlePushToGitHub = () => {
     setTextInputOpen(true);
+    setPushStatus('initial');
   };
 
   const onSuccessCodePushedToGitHub = (url: string) => {
     setRepoUrl(url);
     setPushStatus('success');
+    setGitHubAuthOpen(false);
+    setLoadingSuccessOpen(true);
+  };
+
+  const onErrorCodePushToGithub = (error: string = 'Failed to push code to github') => {
+    setPushStatus('failed');
+    toast.error(error, { position: 'bottom-center' });
   };
 
   const startPushingToGitHub = (repo: string, username: string, token: string) => {
     setRepoName(repo);
     setPushStatus('loading');
     setRepoUrl('');
-    setLoadingSuccessOpen(true); // Show loading modal
-
-    workbenchStore.pushToGitHub(repo, username, token, onSuccessCodePushedToGitHub);
+    workbenchStore.pushToGitHub(repo, username, token, onSuccessCodePushedToGitHub, onErrorCodePushToGithub);
   };
 
   const handleRepoNameInput = (name: string) => {
     setRepoName(name);
-
-    const githubUsername = Cookies.get('githubUsername');
-    const githubToken = Cookies.get('githubToken');
-
-    if (!githubUsername || !githubToken) {
-      setGitHubAuthOpen(true);
-    } else {
-      startPushingToGitHub(name, githubUsername, githubToken);
-    }
+    setGitHubAuthOpen(true);
   };
 
   const handleGitHubAuth = (username: string, token: string) => {
@@ -230,6 +228,7 @@ export const Workbench = memo(({ chatStarted, isStreaming }: WorkspaceProps) => 
                       isOpen={gitHubAuthOpen}
                       onClose={() => setGitHubAuthOpen(false)}
                       onConfirm={handleGitHubAuth}
+                      status={pushStatus}
                     />
                     <LoadingSuccessModal
                       isOpen={loadingSuccessOpen}
