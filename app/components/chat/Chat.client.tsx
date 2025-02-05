@@ -157,7 +157,7 @@ export const ChatImpl = memo(
           const usage = response.usage;
 
           if (usage) {
-            console.log('Token usage:', usage);
+            console.log('Token usage:', usage, { messageLength: message.content.length });
 
             // You can now use the usage data as needed
           }
